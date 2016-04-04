@@ -22,7 +22,7 @@ if sys.version_info[0] >= 3:
 # Scanner generation
 tokens = ('NAME','NUM',)
 
-literals = ['+','*', '-', '/','(',')', '=', '{', '}', ';']
+literals = ['+','*', '-', '/','(',')', '=', '{', '}', ';','?', ':']
 t_NAME    = r'[a-zA-Z_][a-zA-Z0-9_]*'
 
 def t_NUM(t):
@@ -94,6 +94,8 @@ def get_symbol_value_helper(node):
 ## <block_item_list> ::= <statement>
 ##                   | <block_item_list> <statement>
 ##
+## <ternary> ::= <expr> TERNARY <expr> COLON <expr>
+##    
 ## <expr> ::= <term> ADD <expr>
 ##        |  <term> SUBTRACT <expr>
 ##        | <term>
