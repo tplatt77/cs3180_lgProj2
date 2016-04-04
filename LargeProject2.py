@@ -22,7 +22,7 @@ if sys.version_info[0] >= 3:
 # Scanner generation
 tokens = ('NAME','NUM',)
 
-literals = ['+','*', '(',')', '=', '{', '}', ';']
+literals = ['+','*', '-', '/','(',')', '=', '{', '}', ';']
 t_NAME    = r'[a-zA-Z_][a-zA-Z0-9_]*'
 
 def t_NUM(t):
@@ -95,10 +95,12 @@ def get_symbol_value_helper(node):
 ##                   | <block_item_list> <statement>
 ##
 ## <expr> ::= <term> ADD <expr>
+##        |  <term> SUBTRACT <expr>
 ##        | <term>
 ##        | NAME = <expr>
 ##
 ## <term> ::= <factor> MULTIPLY <term>
+##        |  <factor> DIVIDE <term>      
 ##        | <factor>
 ##
 ## <factor> ::= LPAREN <expr> RPAREN
@@ -141,10 +143,17 @@ def p_expr_a(p):
     p[0].function = lambda node: node.children[0].interp() + node.children[1].interp()
 
 def p_expr_b(p):
+    'expr : term "-" expr'
+    p[0] = Node() # Return a Node instance
+    p[0].text = "-"
+    p[0].children = [p[1], p[3]]
+    p[0].function = lambda node: node.children[0].interp() - node.children[1].interp()
+
+def p_expr_c(p):
     'expr : term'
     p[0] = p[1] # Return a Node instance (p[1] is already a Node)
 
-def p_expr_c(p):
+def p_expr_d(p):
     'expr : NAME "=" expr'
     p[0] = Node() # Return a Node instance
     p[0].text = '='
@@ -159,6 +168,13 @@ def p_term_a(p):
     p[0].function = lambda node: node.children[0].interp() * node.children[1].interp()
 
 def p_term_b(p):
+    '''term : factor '/' term '''
+    p[0] = Node() # Return a Node instance
+    p[0].text = "/"
+    p[0].children = [p[1], p[3]]
+    p[0].function = lambda node: node.children[0].interp() / node.children[1].interp()
+
+def p_term_c(p):
     '''term : factor'''
     p[0] = p[1] # Return a Node instance (p[1] is already a Node)
 
