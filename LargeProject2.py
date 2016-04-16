@@ -17,20 +17,25 @@ sys.path.insert(0,"../..")
 if sys.version_info[0] >= 3:
     raw_input = input
 
+# For testing purposes:
+testDriver = False
+
 ######################################################################
 ######################################################################
 # Scanner generation
-tokens = ('NAME','NUM',)
+tokens = ('NAME','NUM','WHILE','PRINT',)
 
 literals = ['+','*', '-', '/','(',')', '=', '{', '}', ';','?', ':']
 t_NAME    = r'[a-zA-Z_][a-zA-Z0-9_]*'
+t_WHILE   = r'@while'
+t_PRINT   = r'@print'
+t_ignore = " \t\r"
 
 def t_NUM(t):
     r'[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?'
     t.value = float(t.value)
     return t
 
-t_ignore = " \t"
 
 def t_newline(t):
     r'\n+'
@@ -66,10 +71,29 @@ class Node:
 
 ######################################################################
 # Helper functions for interpreting parse tree
+def print_interp_helper(node):
+    result = node.children[0].interp()
+    print '"' + str(result) + '"'
+    return result
+
 def block_interp_helper(node):
     result = 0
     for child in node.children :
         result = child.interp()
+    return result
+
+def while_interp_helper(node):
+    result = 0
+    while node.children[0].interp():
+        result = node.children[1].interp()
+    return result
+
+def ternary_interp_helper(node):
+    result = 0
+    if node.children[0].interp():
+        result = node.children[1].interp()
+    else:
+        result = node.children[2].interp()
     return result
 
 def set_symbol_value_helper(node):
@@ -89,12 +113,13 @@ def get_symbol_value_helper(node):
 ##
 ## <statement> ::= <expr> ";"
 ##             | "{" <block_item_list> "}"
+##             | WHILE "(" <expr> ")" <statement>
 ##             | "{" "}"
+##             | <expr> TERNARY <expr> COLON <expr>    
 ##
 ## <block_item_list> ::= <statement>
 ##                   | <block_item_list> <statement>
-##
-## <ternary> ::= <expr> TERNARY <expr> COLON <expr>
+## 
 ##    
 ## <expr> ::= <term> ADD <expr>
 ##        |  <term> SUBTRACT <expr>
@@ -127,6 +152,27 @@ def p_statement_c(p):
     p[0].text = "block"
     p[0].children = p[2]
     p[0].function = lambda node: block_interp_helper(node)
+
+def p_statement_while(p):
+    ' statement : WHILE "(" expr ")" statement '
+    p[0] = Node()
+    p[0].text = "WHILE"
+    p[0].children = [p[3], p[5]]
+    p[0].function = while_interp_helper
+
+def p_statement_print(p):
+    ' statement : PRINT statement '
+    p[0] = Node()
+    p[0].text = "PRINT"
+    p[0].children = [p[2]]
+    p[0].function = print_interp_helper
+
+def p_statement_ternary(p):
+    ' statement : expr "?" expr ":" expr ";"'
+    p[0] = Node() #Return a Node instance
+    p[0].text = "TERNARY"
+    p[0].children = [p[1], p[3], p[5]]
+    p[0].function = ternary_interp_helper
 
 def p_block_item_list_a(p):
     ' block_item_list : statement '
@@ -209,12 +255,13 @@ yacc.yacc()
 ######################################################################
 ######################################################################
 # Test driver
-while 1:
-    try:
-        s = raw_input('calc > ')
-    except EOFError:
-        break
-    if not s: continue
-    rootNode = yacc.parse(s+'\n') # parse() returns None upon error
-    if None != rootNode:
-        print rootNode.interp()   # print result of interpreting the entire node tree
+if testDriver:
+    while 1:
+        try:
+            s = raw_input('calc > ')
+        except EOFError:
+            break
+        if not s: continue
+        rootNode = yacc.parse(s+'\n') # parse() returns None upon error
+        if None != rootNode:
+            print rootNode.interp()   # print result of interpreting the entire node tree

@@ -6,42 +6,49 @@ Rule 0     S' -> statement
 Rule 1     statement -> expr ;
 Rule 2     statement -> { }
 Rule 3     statement -> { block_item_list }
-Rule 4     block_item_list -> statement
-Rule 5     block_item_list -> block_item_list statement
-Rule 6     expr -> term + expr
-Rule 7     expr -> term - expr
-Rule 8     expr -> term
-Rule 9     expr -> NAME = expr
-Rule 10    term -> factor * term
-Rule 11    term -> factor / term
-Rule 12    term -> factor
-Rule 13    factor -> ( expr )
-Rule 14    factor -> NUM
-Rule 15    factor -> NAME
+Rule 4     statement -> WHILE ( expr ) statement
+Rule 5     statement -> PRINT statement
+Rule 6     statement -> expr ? expr : expr ;
+Rule 7     block_item_list -> statement
+Rule 8     block_item_list -> block_item_list statement
+Rule 9     expr -> term + expr
+Rule 10    expr -> term - expr
+Rule 11    expr -> term
+Rule 12    expr -> NAME = expr
+Rule 13    term -> factor * term
+Rule 14    term -> factor / term
+Rule 15    term -> factor
+Rule 16    factor -> ( expr )
+Rule 17    factor -> NUM
+Rule 18    factor -> NAME
 
 Terminals, with rules where they appear
 
-(                    : 13
-)                    : 13
-*                    : 10
-+                    : 6
--                    : 7
-/                    : 11
-;                    : 1
-=                    : 9
-NAME                 : 9 15
-NUM                  : 14
+(                    : 4 16
+)                    : 4 16
+*                    : 13
++                    : 9
+-                    : 10
+/                    : 14
+:                    : 6
+;                    : 1 6
+=                    : 12
+?                    : 6
+NAME                 : 12 18
+NUM                  : 17
+PRINT                : 5
+WHILE                : 4
 error                : 
 {                    : 2 3
 }                    : 2 3
 
 Nonterminals, with rules where they appear
 
-block_item_list      : 3 5
-expr                 : 1 6 7 9 13
-factor               : 10 11 12
-statement            : 4 5 0
-term                 : 6 7 8 10 11
+block_item_list      : 3 8
+expr                 : 1 4 6 6 6 9 10 12 16
+factor               : 13 14 15
+statement            : 4 5 7 8 0
+term                 : 9 10 11 13 14
 
 Parsing method: LALR
 
@@ -51,93 +58,91 @@ state 0
     (1) statement -> . expr ;
     (2) statement -> . { }
     (3) statement -> . { block_item_list }
-    (6) expr -> . term + expr
-    (7) expr -> . term - expr
-    (8) expr -> . term
-    (9) expr -> . NAME = expr
-    (10) term -> . factor * term
-    (11) term -> . factor / term
-    (12) term -> . factor
-    (13) factor -> . ( expr )
-    (14) factor -> . NUM
-    (15) factor -> . NAME
+    (4) statement -> . WHILE ( expr ) statement
+    (5) statement -> . PRINT statement
+    (6) statement -> . expr ? expr : expr ;
+    (9) expr -> . term + expr
+    (10) expr -> . term - expr
+    (11) expr -> . term
+    (12) expr -> . NAME = expr
+    (13) term -> . factor * term
+    (14) term -> . factor / term
+    (15) term -> . factor
+    (16) factor -> . ( expr )
+    (17) factor -> . NUM
+    (18) factor -> . NAME
 
-    {               shift and go to state 8
+    {               shift and go to state 10
+    WHILE           shift and go to state 4
+    PRINT           shift and go to state 8
     NAME            shift and go to state 2
-    (               shift and go to state 5
-    NUM             shift and go to state 4
+    (               shift and go to state 7
+    NUM             shift and go to state 5
 
     expr                           shift and go to state 3
     term                           shift and go to state 1
     statement                      shift and go to state 6
-    factor                         shift and go to state 7
+    factor                         shift and go to state 9
 
 state 1
 
-    (6) expr -> term . + expr
-    (7) expr -> term . - expr
-    (8) expr -> term .
+    (9) expr -> term . + expr
+    (10) expr -> term . - expr
+    (11) expr -> term .
 
-    +               shift and go to state 10
-    -               shift and go to state 9
-    ;               reduce using rule 8 (expr -> term .)
-    )               reduce using rule 8 (expr -> term .)
+    +               shift and go to state 12
+    -               shift and go to state 11
+    ;               reduce using rule 11 (expr -> term .)
+    ?               reduce using rule 11 (expr -> term .)
+    :               reduce using rule 11 (expr -> term .)
+    )               reduce using rule 11 (expr -> term .)
 
 
 state 2
 
-    (9) expr -> NAME . = expr
-    (15) factor -> NAME .
+    (12) expr -> NAME . = expr
+    (18) factor -> NAME .
 
-    =               shift and go to state 11
-    *               reduce using rule 15 (factor -> NAME .)
-    /               reduce using rule 15 (factor -> NAME .)
-    +               reduce using rule 15 (factor -> NAME .)
-    -               reduce using rule 15 (factor -> NAME .)
-    ;               reduce using rule 15 (factor -> NAME .)
-    )               reduce using rule 15 (factor -> NAME .)
+    =               shift and go to state 13
+    *               reduce using rule 18 (factor -> NAME .)
+    /               reduce using rule 18 (factor -> NAME .)
+    +               reduce using rule 18 (factor -> NAME .)
+    -               reduce using rule 18 (factor -> NAME .)
+    ;               reduce using rule 18 (factor -> NAME .)
+    ?               reduce using rule 18 (factor -> NAME .)
+    )               reduce using rule 18 (factor -> NAME .)
+    :               reduce using rule 18 (factor -> NAME .)
 
 
 state 3
 
     (1) statement -> expr . ;
+    (6) statement -> expr . ? expr : expr ;
 
-    ;               shift and go to state 12
+    ;               shift and go to state 14
+    ?               shift and go to state 15
 
 
 state 4
 
-    (14) factor -> NUM .
+    (4) statement -> WHILE . ( expr ) statement
 
-    *               reduce using rule 14 (factor -> NUM .)
-    /               reduce using rule 14 (factor -> NUM .)
-    +               reduce using rule 14 (factor -> NUM .)
-    -               reduce using rule 14 (factor -> NUM .)
-    ;               reduce using rule 14 (factor -> NUM .)
-    )               reduce using rule 14 (factor -> NUM .)
+    (               shift and go to state 16
 
 
 state 5
 
-    (13) factor -> ( . expr )
-    (6) expr -> . term + expr
-    (7) expr -> . term - expr
-    (8) expr -> . term
-    (9) expr -> . NAME = expr
-    (10) term -> . factor * term
-    (11) term -> . factor / term
-    (12) term -> . factor
-    (13) factor -> . ( expr )
-    (14) factor -> . NUM
-    (15) factor -> . NAME
+    (17) factor -> NUM .
 
-    NAME            shift and go to state 2
-    (               shift and go to state 5
-    NUM             shift and go to state 4
+    *               reduce using rule 17 (factor -> NUM .)
+    /               reduce using rule 17 (factor -> NUM .)
+    +               reduce using rule 17 (factor -> NUM .)
+    -               reduce using rule 17 (factor -> NUM .)
+    ;               reduce using rule 17 (factor -> NUM .)
+    ?               reduce using rule 17 (factor -> NUM .)
+    )               reduce using rule 17 (factor -> NUM .)
+    :               reduce using rule 17 (factor -> NUM .)
 
-    expr                           shift and go to state 13
-    term                           shift and go to state 1
-    factor                         shift and go to state 7
 
 state 6
 
@@ -147,308 +152,559 @@ state 6
 
 state 7
 
-    (10) term -> factor . * term
-    (11) term -> factor . / term
-    (12) term -> factor .
+    (16) factor -> ( . expr )
+    (9) expr -> . term + expr
+    (10) expr -> . term - expr
+    (11) expr -> . term
+    (12) expr -> . NAME = expr
+    (13) term -> . factor * term
+    (14) term -> . factor / term
+    (15) term -> . factor
+    (16) factor -> . ( expr )
+    (17) factor -> . NUM
+    (18) factor -> . NAME
 
-    *               shift and go to state 14
-    /               shift and go to state 15
-    +               reduce using rule 12 (term -> factor .)
-    -               reduce using rule 12 (term -> factor .)
-    ;               reduce using rule 12 (term -> factor .)
-    )               reduce using rule 12 (term -> factor .)
+    NAME            shift and go to state 2
+    (               shift and go to state 7
+    NUM             shift and go to state 5
 
+    expr                           shift and go to state 17
+    term                           shift and go to state 1
+    factor                         shift and go to state 9
 
 state 8
 
-    (2) statement -> { . }
-    (3) statement -> { . block_item_list }
-    (4) block_item_list -> . statement
-    (5) block_item_list -> . block_item_list statement
+    (5) statement -> PRINT . statement
     (1) statement -> . expr ;
     (2) statement -> . { }
     (3) statement -> . { block_item_list }
-    (6) expr -> . term + expr
-    (7) expr -> . term - expr
-    (8) expr -> . term
-    (9) expr -> . NAME = expr
-    (10) term -> . factor * term
-    (11) term -> . factor / term
-    (12) term -> . factor
-    (13) factor -> . ( expr )
-    (14) factor -> . NUM
-    (15) factor -> . NAME
+    (4) statement -> . WHILE ( expr ) statement
+    (5) statement -> . PRINT statement
+    (6) statement -> . expr ? expr : expr ;
+    (9) expr -> . term + expr
+    (10) expr -> . term - expr
+    (11) expr -> . term
+    (12) expr -> . NAME = expr
+    (13) term -> . factor * term
+    (14) term -> . factor / term
+    (15) term -> . factor
+    (16) factor -> . ( expr )
+    (17) factor -> . NUM
+    (18) factor -> . NAME
 
-    }               shift and go to state 17
-    {               shift and go to state 8
+    {               shift and go to state 10
+    WHILE           shift and go to state 4
+    PRINT           shift and go to state 8
     NAME            shift and go to state 2
-    (               shift and go to state 5
-    NUM             shift and go to state 4
+    (               shift and go to state 7
+    NUM             shift and go to state 5
 
     expr                           shift and go to state 3
     term                           shift and go to state 1
-    block_item_list                shift and go to state 18
-    statement                      shift and go to state 16
-    factor                         shift and go to state 7
+    statement                      shift and go to state 18
+    factor                         shift and go to state 9
 
 state 9
 
-    (7) expr -> term - . expr
-    (6) expr -> . term + expr
-    (7) expr -> . term - expr
-    (8) expr -> . term
-    (9) expr -> . NAME = expr
-    (10) term -> . factor * term
-    (11) term -> . factor / term
-    (12) term -> . factor
-    (13) factor -> . ( expr )
-    (14) factor -> . NUM
-    (15) factor -> . NAME
+    (13) term -> factor . * term
+    (14) term -> factor . / term
+    (15) term -> factor .
 
-    NAME            shift and go to state 2
-    (               shift and go to state 5
-    NUM             shift and go to state 4
+    *               shift and go to state 19
+    /               shift and go to state 20
+    +               reduce using rule 15 (term -> factor .)
+    -               reduce using rule 15 (term -> factor .)
+    ;               reduce using rule 15 (term -> factor .)
+    ?               reduce using rule 15 (term -> factor .)
+    )               reduce using rule 15 (term -> factor .)
+    :               reduce using rule 15 (term -> factor .)
 
-    expr                           shift and go to state 19
-    term                           shift and go to state 1
-    factor                         shift and go to state 7
 
 state 10
 
-    (6) expr -> term + . expr
-    (6) expr -> . term + expr
-    (7) expr -> . term - expr
-    (8) expr -> . term
-    (9) expr -> . NAME = expr
-    (10) term -> . factor * term
-    (11) term -> . factor / term
-    (12) term -> . factor
-    (13) factor -> . ( expr )
-    (14) factor -> . NUM
-    (15) factor -> . NAME
+    (2) statement -> { . }
+    (3) statement -> { . block_item_list }
+    (7) block_item_list -> . statement
+    (8) block_item_list -> . block_item_list statement
+    (1) statement -> . expr ;
+    (2) statement -> . { }
+    (3) statement -> . { block_item_list }
+    (4) statement -> . WHILE ( expr ) statement
+    (5) statement -> . PRINT statement
+    (6) statement -> . expr ? expr : expr ;
+    (9) expr -> . term + expr
+    (10) expr -> . term - expr
+    (11) expr -> . term
+    (12) expr -> . NAME = expr
+    (13) term -> . factor * term
+    (14) term -> . factor / term
+    (15) term -> . factor
+    (16) factor -> . ( expr )
+    (17) factor -> . NUM
+    (18) factor -> . NAME
 
+    }               shift and go to state 22
+    {               shift and go to state 10
+    WHILE           shift and go to state 4
+    PRINT           shift and go to state 8
     NAME            shift and go to state 2
-    (               shift and go to state 5
-    NUM             shift and go to state 4
+    (               shift and go to state 7
+    NUM             shift and go to state 5
 
-    expr                           shift and go to state 20
+    expr                           shift and go to state 3
     term                           shift and go to state 1
-    factor                         shift and go to state 7
+    block_item_list                shift and go to state 23
+    statement                      shift and go to state 21
+    factor                         shift and go to state 9
 
 state 11
 
-    (9) expr -> NAME = . expr
-    (6) expr -> . term + expr
-    (7) expr -> . term - expr
-    (8) expr -> . term
-    (9) expr -> . NAME = expr
-    (10) term -> . factor * term
-    (11) term -> . factor / term
-    (12) term -> . factor
-    (13) factor -> . ( expr )
-    (14) factor -> . NUM
-    (15) factor -> . NAME
+    (10) expr -> term - . expr
+    (9) expr -> . term + expr
+    (10) expr -> . term - expr
+    (11) expr -> . term
+    (12) expr -> . NAME = expr
+    (13) term -> . factor * term
+    (14) term -> . factor / term
+    (15) term -> . factor
+    (16) factor -> . ( expr )
+    (17) factor -> . NUM
+    (18) factor -> . NAME
 
     NAME            shift and go to state 2
-    (               shift and go to state 5
-    NUM             shift and go to state 4
+    (               shift and go to state 7
+    NUM             shift and go to state 5
 
-    expr                           shift and go to state 21
+    expr                           shift and go to state 24
     term                           shift and go to state 1
-    factor                         shift and go to state 7
+    factor                         shift and go to state 9
 
 state 12
 
-    (1) statement -> expr ; .
+    (9) expr -> term + . expr
+    (9) expr -> . term + expr
+    (10) expr -> . term - expr
+    (11) expr -> . term
+    (12) expr -> . NAME = expr
+    (13) term -> . factor * term
+    (14) term -> . factor / term
+    (15) term -> . factor
+    (16) factor -> . ( expr )
+    (17) factor -> . NUM
+    (18) factor -> . NAME
 
-    }               reduce using rule 1 (statement -> expr ; .)
-    {               reduce using rule 1 (statement -> expr ; .)
-    NAME            reduce using rule 1 (statement -> expr ; .)
-    (               reduce using rule 1 (statement -> expr ; .)
-    NUM             reduce using rule 1 (statement -> expr ; .)
-    $end            reduce using rule 1 (statement -> expr ; .)
+    NAME            shift and go to state 2
+    (               shift and go to state 7
+    NUM             shift and go to state 5
 
+    expr                           shift and go to state 25
+    term                           shift and go to state 1
+    factor                         shift and go to state 9
 
 state 13
 
-    (13) factor -> ( expr . )
+    (12) expr -> NAME = . expr
+    (9) expr -> . term + expr
+    (10) expr -> . term - expr
+    (11) expr -> . term
+    (12) expr -> . NAME = expr
+    (13) term -> . factor * term
+    (14) term -> . factor / term
+    (15) term -> . factor
+    (16) factor -> . ( expr )
+    (17) factor -> . NUM
+    (18) factor -> . NAME
 
-    )               shift and go to state 22
+    NAME            shift and go to state 2
+    (               shift and go to state 7
+    NUM             shift and go to state 5
 
+    expr                           shift and go to state 26
+    term                           shift and go to state 1
+    factor                         shift and go to state 9
 
 state 14
 
-    (10) term -> factor * . term
-    (10) term -> . factor * term
-    (11) term -> . factor / term
-    (12) term -> . factor
-    (13) factor -> . ( expr )
-    (14) factor -> . NUM
-    (15) factor -> . NAME
+    (1) statement -> expr ; .
 
-    (               shift and go to state 5
-    NUM             shift and go to state 4
-    NAME            shift and go to state 24
+    $end            reduce using rule 1 (statement -> expr ; .)
+    }               reduce using rule 1 (statement -> expr ; .)
+    {               reduce using rule 1 (statement -> expr ; .)
+    WHILE           reduce using rule 1 (statement -> expr ; .)
+    PRINT           reduce using rule 1 (statement -> expr ; .)
+    NAME            reduce using rule 1 (statement -> expr ; .)
+    (               reduce using rule 1 (statement -> expr ; .)
+    NUM             reduce using rule 1 (statement -> expr ; .)
 
-    term                           shift and go to state 23
-    factor                         shift and go to state 7
 
 state 15
 
-    (11) term -> factor / . term
-    (10) term -> . factor * term
-    (11) term -> . factor / term
-    (12) term -> . factor
-    (13) factor -> . ( expr )
-    (14) factor -> . NUM
-    (15) factor -> . NAME
+    (6) statement -> expr ? . expr : expr ;
+    (9) expr -> . term + expr
+    (10) expr -> . term - expr
+    (11) expr -> . term
+    (12) expr -> . NAME = expr
+    (13) term -> . factor * term
+    (14) term -> . factor / term
+    (15) term -> . factor
+    (16) factor -> . ( expr )
+    (17) factor -> . NUM
+    (18) factor -> . NAME
 
-    (               shift and go to state 5
-    NUM             shift and go to state 4
-    NAME            shift and go to state 24
+    NAME            shift and go to state 2
+    (               shift and go to state 7
+    NUM             shift and go to state 5
 
-    term                           shift and go to state 25
-    factor                         shift and go to state 7
+    expr                           shift and go to state 27
+    term                           shift and go to state 1
+    factor                         shift and go to state 9
 
 state 16
 
-    (4) block_item_list -> statement .
+    (4) statement -> WHILE ( . expr ) statement
+    (9) expr -> . term + expr
+    (10) expr -> . term - expr
+    (11) expr -> . term
+    (12) expr -> . NAME = expr
+    (13) term -> . factor * term
+    (14) term -> . factor / term
+    (15) term -> . factor
+    (16) factor -> . ( expr )
+    (17) factor -> . NUM
+    (18) factor -> . NAME
 
-    }               reduce using rule 4 (block_item_list -> statement .)
-    {               reduce using rule 4 (block_item_list -> statement .)
-    NAME            reduce using rule 4 (block_item_list -> statement .)
-    (               reduce using rule 4 (block_item_list -> statement .)
-    NUM             reduce using rule 4 (block_item_list -> statement .)
+    NAME            shift and go to state 2
+    (               shift and go to state 7
+    NUM             shift and go to state 5
 
+    expr                           shift and go to state 28
+    term                           shift and go to state 1
+    factor                         shift and go to state 9
 
 state 17
 
-    (2) statement -> { } .
+    (16) factor -> ( expr . )
 
-    }               reduce using rule 2 (statement -> { } .)
-    {               reduce using rule 2 (statement -> { } .)
-    NAME            reduce using rule 2 (statement -> { } .)
-    (               reduce using rule 2 (statement -> { } .)
-    NUM             reduce using rule 2 (statement -> { } .)
-    $end            reduce using rule 2 (statement -> { } .)
+    )               shift and go to state 29
 
 
 state 18
 
-    (3) statement -> { block_item_list . }
-    (5) block_item_list -> block_item_list . statement
-    (1) statement -> . expr ;
-    (2) statement -> . { }
-    (3) statement -> . { block_item_list }
-    (6) expr -> . term + expr
-    (7) expr -> . term - expr
-    (8) expr -> . term
-    (9) expr -> . NAME = expr
-    (10) term -> . factor * term
-    (11) term -> . factor / term
-    (12) term -> . factor
-    (13) factor -> . ( expr )
-    (14) factor -> . NUM
-    (15) factor -> . NAME
+    (5) statement -> PRINT statement .
 
-    }               shift and go to state 27
-    {               shift and go to state 8
-    NAME            shift and go to state 2
-    (               shift and go to state 5
-    NUM             shift and go to state 4
+    $end            reduce using rule 5 (statement -> PRINT statement .)
+    }               reduce using rule 5 (statement -> PRINT statement .)
+    {               reduce using rule 5 (statement -> PRINT statement .)
+    WHILE           reduce using rule 5 (statement -> PRINT statement .)
+    PRINT           reduce using rule 5 (statement -> PRINT statement .)
+    NAME            reduce using rule 5 (statement -> PRINT statement .)
+    (               reduce using rule 5 (statement -> PRINT statement .)
+    NUM             reduce using rule 5 (statement -> PRINT statement .)
 
-    expr                           shift and go to state 3
-    term                           shift and go to state 1
-    statement                      shift and go to state 26
-    factor                         shift and go to state 7
 
 state 19
 
-    (7) expr -> term - expr .
+    (13) term -> factor * . term
+    (13) term -> . factor * term
+    (14) term -> . factor / term
+    (15) term -> . factor
+    (16) factor -> . ( expr )
+    (17) factor -> . NUM
+    (18) factor -> . NAME
 
-    ;               reduce using rule 7 (expr -> term - expr .)
-    )               reduce using rule 7 (expr -> term - expr .)
+    (               shift and go to state 7
+    NUM             shift and go to state 5
+    NAME            shift and go to state 31
 
+    term                           shift and go to state 30
+    factor                         shift and go to state 9
 
 state 20
 
-    (6) expr -> term + expr .
+    (14) term -> factor / . term
+    (13) term -> . factor * term
+    (14) term -> . factor / term
+    (15) term -> . factor
+    (16) factor -> . ( expr )
+    (17) factor -> . NUM
+    (18) factor -> . NAME
 
-    ;               reduce using rule 6 (expr -> term + expr .)
-    )               reduce using rule 6 (expr -> term + expr .)
+    (               shift and go to state 7
+    NUM             shift and go to state 5
+    NAME            shift and go to state 31
 
+    term                           shift and go to state 32
+    factor                         shift and go to state 9
 
 state 21
 
-    (9) expr -> NAME = expr .
+    (7) block_item_list -> statement .
 
-    ;               reduce using rule 9 (expr -> NAME = expr .)
-    )               reduce using rule 9 (expr -> NAME = expr .)
+    }               reduce using rule 7 (block_item_list -> statement .)
+    {               reduce using rule 7 (block_item_list -> statement .)
+    WHILE           reduce using rule 7 (block_item_list -> statement .)
+    PRINT           reduce using rule 7 (block_item_list -> statement .)
+    NAME            reduce using rule 7 (block_item_list -> statement .)
+    (               reduce using rule 7 (block_item_list -> statement .)
+    NUM             reduce using rule 7 (block_item_list -> statement .)
 
 
 state 22
 
-    (13) factor -> ( expr ) .
+    (2) statement -> { } .
 
-    *               reduce using rule 13 (factor -> ( expr ) .)
-    /               reduce using rule 13 (factor -> ( expr ) .)
-    +               reduce using rule 13 (factor -> ( expr ) .)
-    -               reduce using rule 13 (factor -> ( expr ) .)
-    ;               reduce using rule 13 (factor -> ( expr ) .)
-    )               reduce using rule 13 (factor -> ( expr ) .)
+    $end            reduce using rule 2 (statement -> { } .)
+    }               reduce using rule 2 (statement -> { } .)
+    {               reduce using rule 2 (statement -> { } .)
+    WHILE           reduce using rule 2 (statement -> { } .)
+    PRINT           reduce using rule 2 (statement -> { } .)
+    NAME            reduce using rule 2 (statement -> { } .)
+    (               reduce using rule 2 (statement -> { } .)
+    NUM             reduce using rule 2 (statement -> { } .)
 
 
 state 23
 
-    (10) term -> factor * term .
+    (3) statement -> { block_item_list . }
+    (8) block_item_list -> block_item_list . statement
+    (1) statement -> . expr ;
+    (2) statement -> . { }
+    (3) statement -> . { block_item_list }
+    (4) statement -> . WHILE ( expr ) statement
+    (5) statement -> . PRINT statement
+    (6) statement -> . expr ? expr : expr ;
+    (9) expr -> . term + expr
+    (10) expr -> . term - expr
+    (11) expr -> . term
+    (12) expr -> . NAME = expr
+    (13) term -> . factor * term
+    (14) term -> . factor / term
+    (15) term -> . factor
+    (16) factor -> . ( expr )
+    (17) factor -> . NUM
+    (18) factor -> . NAME
 
-    +               reduce using rule 10 (term -> factor * term .)
-    -               reduce using rule 10 (term -> factor * term .)
-    ;               reduce using rule 10 (term -> factor * term .)
-    )               reduce using rule 10 (term -> factor * term .)
+    }               shift and go to state 34
+    {               shift and go to state 10
+    WHILE           shift and go to state 4
+    PRINT           shift and go to state 8
+    NAME            shift and go to state 2
+    (               shift and go to state 7
+    NUM             shift and go to state 5
 
+    expr                           shift and go to state 3
+    term                           shift and go to state 1
+    statement                      shift and go to state 33
+    factor                         shift and go to state 9
 
 state 24
 
-    (15) factor -> NAME .
+    (10) expr -> term - expr .
 
-    *               reduce using rule 15 (factor -> NAME .)
-    /               reduce using rule 15 (factor -> NAME .)
-    +               reduce using rule 15 (factor -> NAME .)
-    -               reduce using rule 15 (factor -> NAME .)
-    ;               reduce using rule 15 (factor -> NAME .)
-    )               reduce using rule 15 (factor -> NAME .)
+    ;               reduce using rule 10 (expr -> term - expr .)
+    ?               reduce using rule 10 (expr -> term - expr .)
+    :               reduce using rule 10 (expr -> term - expr .)
+    )               reduce using rule 10 (expr -> term - expr .)
 
 
 state 25
 
-    (11) term -> factor / term .
+    (9) expr -> term + expr .
 
-    +               reduce using rule 11 (term -> factor / term .)
-    -               reduce using rule 11 (term -> factor / term .)
-    ;               reduce using rule 11 (term -> factor / term .)
-    )               reduce using rule 11 (term -> factor / term .)
+    ;               reduce using rule 9 (expr -> term + expr .)
+    ?               reduce using rule 9 (expr -> term + expr .)
+    :               reduce using rule 9 (expr -> term + expr .)
+    )               reduce using rule 9 (expr -> term + expr .)
 
 
 state 26
 
-    (5) block_item_list -> block_item_list statement .
+    (12) expr -> NAME = expr .
 
-    }               reduce using rule 5 (block_item_list -> block_item_list statement .)
-    {               reduce using rule 5 (block_item_list -> block_item_list statement .)
-    NAME            reduce using rule 5 (block_item_list -> block_item_list statement .)
-    (               reduce using rule 5 (block_item_list -> block_item_list statement .)
-    NUM             reduce using rule 5 (block_item_list -> block_item_list statement .)
+    ;               reduce using rule 12 (expr -> NAME = expr .)
+    ?               reduce using rule 12 (expr -> NAME = expr .)
+    :               reduce using rule 12 (expr -> NAME = expr .)
+    )               reduce using rule 12 (expr -> NAME = expr .)
 
 
 state 27
 
+    (6) statement -> expr ? expr . : expr ;
+
+    :               shift and go to state 35
+
+
+state 28
+
+    (4) statement -> WHILE ( expr . ) statement
+
+    )               shift and go to state 36
+
+
+state 29
+
+    (16) factor -> ( expr ) .
+
+    *               reduce using rule 16 (factor -> ( expr ) .)
+    /               reduce using rule 16 (factor -> ( expr ) .)
+    +               reduce using rule 16 (factor -> ( expr ) .)
+    -               reduce using rule 16 (factor -> ( expr ) .)
+    ;               reduce using rule 16 (factor -> ( expr ) .)
+    ?               reduce using rule 16 (factor -> ( expr ) .)
+    )               reduce using rule 16 (factor -> ( expr ) .)
+    :               reduce using rule 16 (factor -> ( expr ) .)
+
+
+state 30
+
+    (13) term -> factor * term .
+
+    +               reduce using rule 13 (term -> factor * term .)
+    -               reduce using rule 13 (term -> factor * term .)
+    ;               reduce using rule 13 (term -> factor * term .)
+    ?               reduce using rule 13 (term -> factor * term .)
+    )               reduce using rule 13 (term -> factor * term .)
+    :               reduce using rule 13 (term -> factor * term .)
+
+
+state 31
+
+    (18) factor -> NAME .
+
+    *               reduce using rule 18 (factor -> NAME .)
+    /               reduce using rule 18 (factor -> NAME .)
+    +               reduce using rule 18 (factor -> NAME .)
+    -               reduce using rule 18 (factor -> NAME .)
+    ;               reduce using rule 18 (factor -> NAME .)
+    ?               reduce using rule 18 (factor -> NAME .)
+    )               reduce using rule 18 (factor -> NAME .)
+    :               reduce using rule 18 (factor -> NAME .)
+
+
+state 32
+
+    (14) term -> factor / term .
+
+    +               reduce using rule 14 (term -> factor / term .)
+    -               reduce using rule 14 (term -> factor / term .)
+    ;               reduce using rule 14 (term -> factor / term .)
+    ?               reduce using rule 14 (term -> factor / term .)
+    )               reduce using rule 14 (term -> factor / term .)
+    :               reduce using rule 14 (term -> factor / term .)
+
+
+state 33
+
+    (8) block_item_list -> block_item_list statement .
+
+    }               reduce using rule 8 (block_item_list -> block_item_list statement .)
+    {               reduce using rule 8 (block_item_list -> block_item_list statement .)
+    WHILE           reduce using rule 8 (block_item_list -> block_item_list statement .)
+    PRINT           reduce using rule 8 (block_item_list -> block_item_list statement .)
+    NAME            reduce using rule 8 (block_item_list -> block_item_list statement .)
+    (               reduce using rule 8 (block_item_list -> block_item_list statement .)
+    NUM             reduce using rule 8 (block_item_list -> block_item_list statement .)
+
+
+state 34
+
     (3) statement -> { block_item_list } .
 
+    $end            reduce using rule 3 (statement -> { block_item_list } .)
     }               reduce using rule 3 (statement -> { block_item_list } .)
     {               reduce using rule 3 (statement -> { block_item_list } .)
+    WHILE           reduce using rule 3 (statement -> { block_item_list } .)
+    PRINT           reduce using rule 3 (statement -> { block_item_list } .)
     NAME            reduce using rule 3 (statement -> { block_item_list } .)
     (               reduce using rule 3 (statement -> { block_item_list } .)
     NUM             reduce using rule 3 (statement -> { block_item_list } .)
-    $end            reduce using rule 3 (statement -> { block_item_list } .)
+
+
+state 35
+
+    (6) statement -> expr ? expr : . expr ;
+    (9) expr -> . term + expr
+    (10) expr -> . term - expr
+    (11) expr -> . term
+    (12) expr -> . NAME = expr
+    (13) term -> . factor * term
+    (14) term -> . factor / term
+    (15) term -> . factor
+    (16) factor -> . ( expr )
+    (17) factor -> . NUM
+    (18) factor -> . NAME
+
+    NAME            shift and go to state 2
+    (               shift and go to state 7
+    NUM             shift and go to state 5
+
+    expr                           shift and go to state 37
+    term                           shift and go to state 1
+    factor                         shift and go to state 9
+
+state 36
+
+    (4) statement -> WHILE ( expr ) . statement
+    (1) statement -> . expr ;
+    (2) statement -> . { }
+    (3) statement -> . { block_item_list }
+    (4) statement -> . WHILE ( expr ) statement
+    (5) statement -> . PRINT statement
+    (6) statement -> . expr ? expr : expr ;
+    (9) expr -> . term + expr
+    (10) expr -> . term - expr
+    (11) expr -> . term
+    (12) expr -> . NAME = expr
+    (13) term -> . factor * term
+    (14) term -> . factor / term
+    (15) term -> . factor
+    (16) factor -> . ( expr )
+    (17) factor -> . NUM
+    (18) factor -> . NAME
+
+    {               shift and go to state 10
+    WHILE           shift and go to state 4
+    PRINT           shift and go to state 8
+    NAME            shift and go to state 2
+    (               shift and go to state 7
+    NUM             shift and go to state 5
+
+    expr                           shift and go to state 3
+    term                           shift and go to state 1
+    statement                      shift and go to state 38
+    factor                         shift and go to state 9
+
+state 37
+
+    (6) statement -> expr ? expr : expr . ;
+
+    ;               shift and go to state 39
+
+
+state 38
+
+    (4) statement -> WHILE ( expr ) statement .
+
+    $end            reduce using rule 4 (statement -> WHILE ( expr ) statement .)
+    }               reduce using rule 4 (statement -> WHILE ( expr ) statement .)
+    {               reduce using rule 4 (statement -> WHILE ( expr ) statement .)
+    WHILE           reduce using rule 4 (statement -> WHILE ( expr ) statement .)
+    PRINT           reduce using rule 4 (statement -> WHILE ( expr ) statement .)
+    NAME            reduce using rule 4 (statement -> WHILE ( expr ) statement .)
+    (               reduce using rule 4 (statement -> WHILE ( expr ) statement .)
+    NUM             reduce using rule 4 (statement -> WHILE ( expr ) statement .)
+
+
+state 39
+
+    (6) statement -> expr ? expr : expr ; .
+
+    $end            reduce using rule 6 (statement -> expr ? expr : expr ; .)
+    }               reduce using rule 6 (statement -> expr ? expr : expr ; .)
+    {               reduce using rule 6 (statement -> expr ? expr : expr ; .)
+    WHILE           reduce using rule 6 (statement -> expr ? expr : expr ; .)
+    PRINT           reduce using rule 6 (statement -> expr ? expr : expr ; .)
+    NAME            reduce using rule 6 (statement -> expr ? expr : expr ; .)
+    (               reduce using rule 6 (statement -> expr ? expr : expr ; .)
+    NUM             reduce using rule 6 (statement -> expr ? expr : expr ; .)
 

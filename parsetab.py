@@ -5,9 +5,9 @@ _tabversion = '3.8'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'AB8A82635A284FAC5ED6C8345E8A9B39'
+_lr_signature = 'F7DF0D15AD6D1B85AF2031386CEA5C73'
     
-_lr_action_items = {'NAME':([0,5,8,9,10,11,12,14,15,16,17,18,26,27,],[2,2,2,2,2,2,-1,24,24,-4,-2,2,-5,-3,]),')':([1,2,4,7,13,19,20,21,22,23,24,25,],[-8,-15,-14,-12,22,-7,-6,-9,-13,-10,-15,-11,]),'(':([0,5,8,9,10,11,12,14,15,16,17,18,26,27,],[5,5,5,5,5,5,-1,5,5,-4,-2,5,-5,-3,]),'+':([1,2,4,7,22,23,24,25,],[10,-15,-14,-12,-13,-10,-15,-11,]),'*':([2,4,7,22,24,],[-15,-14,14,-13,-15,]),'-':([1,2,4,7,22,23,24,25,],[9,-15,-14,-12,-13,-10,-15,-11,]),'}':([8,12,16,17,18,26,27,],[17,-1,-4,-2,27,-5,-3,]),'/':([2,4,7,22,24,],[-15,-14,15,-13,-15,]),'NUM':([0,5,8,9,10,11,12,14,15,16,17,18,26,27,],[4,4,4,4,4,4,-1,4,4,-4,-2,4,-5,-3,]),'{':([0,8,12,16,17,18,26,27,],[8,8,-1,-4,-2,8,-5,-3,]),'=':([2,],[11,]),';':([1,2,3,4,7,19,20,21,22,23,24,25,],[-8,-15,12,-14,-12,-7,-6,-9,-13,-10,-15,-11,]),'$end':([6,12,17,27,],[0,-1,-2,-3,]),}
+_lr_action_items = {'NAME':([0,7,8,10,11,12,13,14,15,16,18,19,20,21,22,23,33,34,35,36,38,39,],[2,2,2,2,2,2,2,-1,2,2,-5,31,31,-7,-2,2,-8,-3,2,2,-4,-6,]),')':([1,2,5,9,17,24,25,26,28,29,30,31,32,],[-11,-18,-17,-15,29,-10,-9,-12,36,-16,-13,-18,-14,]),'(':([0,4,7,8,10,11,12,13,14,15,16,18,19,20,21,22,23,33,34,35,36,38,39,],[7,16,7,7,7,7,7,7,-1,7,7,-5,7,7,-7,-2,7,-8,-3,7,7,-4,-6,]),'+':([1,2,5,9,29,30,31,32,],[12,-18,-17,-15,-16,-13,-18,-14,]),'*':([2,5,9,29,31,],[-18,-17,19,-16,-18,]),'-':([1,2,5,9,29,30,31,32,],[11,-18,-17,-15,-16,-13,-18,-14,]),'}':([10,14,18,21,22,23,33,34,38,39,],[22,-1,-5,-7,-2,34,-8,-3,-4,-6,]),'/':([2,5,9,29,31,],[-18,-17,20,-16,-18,]),'WHILE':([0,8,10,14,18,21,22,23,33,34,36,38,39,],[4,4,4,-1,-5,-7,-2,4,-8,-3,4,-4,-6,]),'NUM':([0,7,8,10,11,12,13,14,15,16,18,19,20,21,22,23,33,34,35,36,38,39,],[5,5,5,5,5,5,5,-1,5,5,-5,5,5,-7,-2,5,-8,-3,5,5,-4,-6,]),'PRINT':([0,8,10,14,18,21,22,23,33,34,36,38,39,],[8,8,8,-1,-5,-7,-2,8,-8,-3,8,-4,-6,]),'{':([0,8,10,14,18,21,22,23,33,34,36,38,39,],[10,10,10,-1,-5,-7,-2,10,-8,-3,10,-4,-6,]),':':([1,2,5,9,24,25,26,27,29,30,31,32,],[-11,-18,-17,-15,-10,-9,-12,35,-16,-13,-18,-14,]),'=':([2,],[13,]),';':([1,2,3,5,9,24,25,26,29,30,31,32,37,],[-11,-18,14,-17,-15,-10,-9,-12,-16,-13,-18,-14,39,]),'?':([1,2,3,5,9,24,25,26,29,30,31,32,],[-11,-18,15,-17,-15,-10,-9,-12,-16,-13,-18,-14,]),'$end':([6,14,18,22,34,38,39,],[0,-1,-5,-2,-3,-4,-6,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'expr':([0,5,8,9,10,11,18,],[3,13,3,19,20,21,3,]),'term':([0,5,8,9,10,11,14,15,18,],[1,1,1,1,1,1,23,25,1,]),'block_item_list':([8,],[18,]),'statement':([0,8,18,],[6,16,26,]),'factor':([0,5,8,9,10,11,14,15,18,],[7,7,7,7,7,7,7,7,7,]),}
+_lr_goto_items = {'expr':([0,7,8,10,11,12,13,15,16,23,35,36,],[3,17,3,3,24,25,26,27,28,3,37,3,]),'term':([0,7,8,10,11,12,13,15,16,19,20,23,35,36,],[1,1,1,1,1,1,1,1,1,30,32,1,1,1,]),'block_item_list':([10,],[23,]),'statement':([0,8,10,23,36,],[6,18,21,33,38,]),'factor':([0,7,8,10,11,12,13,15,16,19,20,23,35,36,],[9,9,9,9,9,9,9,9,9,9,9,9,9,9,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,19 +26,22 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> statement","S'",1,None,None,None),
-  ('statement -> expr ;','statement',2,'p_statement_a','LargeProject2.py',112),
-  ('statement -> { }','statement',2,'p_statement_b','LargeProject2.py',116),
-  ('statement -> { block_item_list }','statement',3,'p_statement_c','LargeProject2.py',123),
-  ('block_item_list -> statement','block_item_list',1,'p_block_item_list_a','LargeProject2.py',130),
-  ('block_item_list -> block_item_list statement','block_item_list',2,'p_block_item_list_b','LargeProject2.py',134),
-  ('expr -> term + expr','expr',3,'p_expr_a','LargeProject2.py',139),
-  ('expr -> term - expr','expr',3,'p_expr_b','LargeProject2.py',146),
-  ('expr -> term','expr',1,'p_expr_c','LargeProject2.py',153),
-  ('expr -> NAME = expr','expr',3,'p_expr_d','LargeProject2.py',157),
-  ('term -> factor * term','term',3,'p_term_a','LargeProject2.py',164),
-  ('term -> factor / term','term',3,'p_term_b','LargeProject2.py',171),
-  ('term -> factor','term',1,'p_term_c','LargeProject2.py',178),
-  ('factor -> ( expr )','factor',3,'p_factor_a','LargeProject2.py',182),
-  ('factor -> NUM','factor',1,'p_factor_b','LargeProject2.py',186),
-  ('factor -> NAME','factor',1,'p_factor_c','LargeProject2.py',193),
+  ('statement -> expr ;','statement',2,'p_statement_a','LargeProject2.py',137),
+  ('statement -> { }','statement',2,'p_statement_b','LargeProject2.py',141),
+  ('statement -> { block_item_list }','statement',3,'p_statement_c','LargeProject2.py',148),
+  ('statement -> WHILE ( expr ) statement','statement',5,'p_statement_while','LargeProject2.py',155),
+  ('statement -> PRINT statement','statement',2,'p_statement_print','LargeProject2.py',162),
+  ('statement -> expr ? expr : expr ;','statement',6,'p_statement_ternary','LargeProject2.py',169),
+  ('block_item_list -> statement','block_item_list',1,'p_block_item_list_a','LargeProject2.py',176),
+  ('block_item_list -> block_item_list statement','block_item_list',2,'p_block_item_list_b','LargeProject2.py',180),
+  ('expr -> term + expr','expr',3,'p_expr_a','LargeProject2.py',185),
+  ('expr -> term - expr','expr',3,'p_expr_b','LargeProject2.py',192),
+  ('expr -> term','expr',1,'p_expr_c','LargeProject2.py',199),
+  ('expr -> NAME = expr','expr',3,'p_expr_d','LargeProject2.py',203),
+  ('term -> factor * term','term',3,'p_term_a','LargeProject2.py',210),
+  ('term -> factor / term','term',3,'p_term_b','LargeProject2.py',217),
+  ('term -> factor','term',1,'p_term_c','LargeProject2.py',224),
+  ('factor -> ( expr )','factor',3,'p_factor_a','LargeProject2.py',228),
+  ('factor -> NUM','factor',1,'p_factor_b','LargeProject2.py',232),
+  ('factor -> NAME','factor',1,'p_factor_c','LargeProject2.py',239),
 ]
