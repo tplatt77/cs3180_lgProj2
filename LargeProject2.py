@@ -1,3 +1,12 @@
+#######################################################################
+##  CS3180 Large Project 2
+##   by Thomas Platt
+##
+##  I used the modified calc.py provided by Professor Buck as well as
+## some other code sources from Pilot. 
+##
+#######################################################################
+
 # --------------------------------------------------------------------
 # calc.py
 #
@@ -18,6 +27,8 @@ if sys.version_info[0] >= 3:
     raw_input = input
 
 # For testing purposes:
+# Set testDriver to True to use the interpreter prompt
+# Otherwise the testFile is read
 testDriver = False
 testFile = "testInput.txt"
 
@@ -130,13 +141,14 @@ def get_symbol_value_helper(node):
 
 
 ######################################################################
-## Sample BNF Grammar for expressions
+## BNF Grammer for Large Project 2
 ##
 ## <statement> ::= <expr> ";"
 ##             | "{" <block_item_list> "}"
 ##             | WHILE "(" <expr> ")" <statement>
 ##             | "{" "}"
-##             | <expr> TERNARY <expr> COLON <expr>    
+##             | <expr> "?" <statement> ":" <statement>
+##             | PRINT statement
 ##
 ## <block_item_list> ::= <statement>
 ##                   | <block_item_list> <statement>
