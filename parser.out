@@ -8,7 +8,7 @@ Rule 2     statement -> { }
 Rule 3     statement -> { block_item_list }
 Rule 4     statement -> WHILE ( expr ) statement
 Rule 5     statement -> PRINT statement
-Rule 6     statement -> expr ? expr : expr ;
+Rule 6     statement -> expr ? statement : statement ;
 Rule 7     block_item_list -> statement
 Rule 8     block_item_list -> block_item_list statement
 Rule 9     expr -> term + expr
@@ -45,9 +45,9 @@ error                :
 Nonterminals, with rules where they appear
 
 block_item_list      : 3 8
-expr                 : 1 4 6 6 6 9 10 12 16
+expr                 : 1 4 6 9 10 12 16
 factor               : 13 14 15
-statement            : 4 5 7 8 0
+statement            : 4 5 6 6 7 8 0
 term                 : 9 10 11 13 14
 
 Parsing method: LALR
@@ -60,7 +60,7 @@ state 0
     (3) statement -> . { block_item_list }
     (4) statement -> . WHILE ( expr ) statement
     (5) statement -> . PRINT statement
-    (6) statement -> . expr ? expr : expr ;
+    (6) statement -> . expr ? statement : statement ;
     (9) expr -> . term + expr
     (10) expr -> . term - expr
     (11) expr -> . term
@@ -94,7 +94,6 @@ state 1
     -               shift and go to state 11
     ;               reduce using rule 11 (expr -> term .)
     ?               reduce using rule 11 (expr -> term .)
-    :               reduce using rule 11 (expr -> term .)
     )               reduce using rule 11 (expr -> term .)
 
 
@@ -111,13 +110,12 @@ state 2
     ;               reduce using rule 18 (factor -> NAME .)
     ?               reduce using rule 18 (factor -> NAME .)
     )               reduce using rule 18 (factor -> NAME .)
-    :               reduce using rule 18 (factor -> NAME .)
 
 
 state 3
 
     (1) statement -> expr . ;
-    (6) statement -> expr . ? expr : expr ;
+    (6) statement -> expr . ? statement : statement ;
 
     ;               shift and go to state 14
     ?               shift and go to state 15
@@ -141,7 +139,6 @@ state 5
     ;               reduce using rule 17 (factor -> NUM .)
     ?               reduce using rule 17 (factor -> NUM .)
     )               reduce using rule 17 (factor -> NUM .)
-    :               reduce using rule 17 (factor -> NUM .)
 
 
 state 6
@@ -180,7 +177,7 @@ state 8
     (3) statement -> . { block_item_list }
     (4) statement -> . WHILE ( expr ) statement
     (5) statement -> . PRINT statement
-    (6) statement -> . expr ? expr : expr ;
+    (6) statement -> . expr ? statement : statement ;
     (9) expr -> . term + expr
     (10) expr -> . term - expr
     (11) expr -> . term
@@ -217,7 +214,6 @@ state 9
     ;               reduce using rule 15 (term -> factor .)
     ?               reduce using rule 15 (term -> factor .)
     )               reduce using rule 15 (term -> factor .)
-    :               reduce using rule 15 (term -> factor .)
 
 
 state 10
@@ -231,7 +227,7 @@ state 10
     (3) statement -> . { block_item_list }
     (4) statement -> . WHILE ( expr ) statement
     (5) statement -> . PRINT statement
-    (6) statement -> . expr ? expr : expr ;
+    (6) statement -> . expr ? statement : statement ;
     (9) expr -> . term + expr
     (10) expr -> . term - expr
     (11) expr -> . term
@@ -335,11 +331,19 @@ state 14
     NAME            reduce using rule 1 (statement -> expr ; .)
     (               reduce using rule 1 (statement -> expr ; .)
     NUM             reduce using rule 1 (statement -> expr ; .)
+    :               reduce using rule 1 (statement -> expr ; .)
+    ;               reduce using rule 1 (statement -> expr ; .)
 
 
 state 15
 
-    (6) statement -> expr ? . expr : expr ;
+    (6) statement -> expr ? . statement : statement ;
+    (1) statement -> . expr ;
+    (2) statement -> . { }
+    (3) statement -> . { block_item_list }
+    (4) statement -> . WHILE ( expr ) statement
+    (5) statement -> . PRINT statement
+    (6) statement -> . expr ? statement : statement ;
     (9) expr -> . term + expr
     (10) expr -> . term - expr
     (11) expr -> . term
@@ -351,12 +355,16 @@ state 15
     (17) factor -> . NUM
     (18) factor -> . NAME
 
+    {               shift and go to state 10
+    WHILE           shift and go to state 4
+    PRINT           shift and go to state 8
     NAME            shift and go to state 2
     (               shift and go to state 7
     NUM             shift and go to state 5
 
-    expr                           shift and go to state 27
+    expr                           shift and go to state 3
     term                           shift and go to state 1
+    statement                      shift and go to state 27
     factor                         shift and go to state 9
 
 state 16
@@ -400,6 +408,8 @@ state 18
     NAME            reduce using rule 5 (statement -> PRINT statement .)
     (               reduce using rule 5 (statement -> PRINT statement .)
     NUM             reduce using rule 5 (statement -> PRINT statement .)
+    :               reduce using rule 5 (statement -> PRINT statement .)
+    ;               reduce using rule 5 (statement -> PRINT statement .)
 
 
 state 19
@@ -461,6 +471,8 @@ state 22
     NAME            reduce using rule 2 (statement -> { } .)
     (               reduce using rule 2 (statement -> { } .)
     NUM             reduce using rule 2 (statement -> { } .)
+    :               reduce using rule 2 (statement -> { } .)
+    ;               reduce using rule 2 (statement -> { } .)
 
 
 state 23
@@ -472,7 +484,7 @@ state 23
     (3) statement -> . { block_item_list }
     (4) statement -> . WHILE ( expr ) statement
     (5) statement -> . PRINT statement
-    (6) statement -> . expr ? expr : expr ;
+    (6) statement -> . expr ? statement : statement ;
     (9) expr -> . term + expr
     (10) expr -> . term - expr
     (11) expr -> . term
@@ -503,7 +515,6 @@ state 24
 
     ;               reduce using rule 10 (expr -> term - expr .)
     ?               reduce using rule 10 (expr -> term - expr .)
-    :               reduce using rule 10 (expr -> term - expr .)
     )               reduce using rule 10 (expr -> term - expr .)
 
 
@@ -513,7 +524,6 @@ state 25
 
     ;               reduce using rule 9 (expr -> term + expr .)
     ?               reduce using rule 9 (expr -> term + expr .)
-    :               reduce using rule 9 (expr -> term + expr .)
     )               reduce using rule 9 (expr -> term + expr .)
 
 
@@ -523,13 +533,12 @@ state 26
 
     ;               reduce using rule 12 (expr -> NAME = expr .)
     ?               reduce using rule 12 (expr -> NAME = expr .)
-    :               reduce using rule 12 (expr -> NAME = expr .)
     )               reduce using rule 12 (expr -> NAME = expr .)
 
 
 state 27
 
-    (6) statement -> expr ? expr . : expr ;
+    (6) statement -> expr ? statement . : statement ;
 
     :               shift and go to state 35
 
@@ -552,7 +561,6 @@ state 29
     ;               reduce using rule 16 (factor -> ( expr ) .)
     ?               reduce using rule 16 (factor -> ( expr ) .)
     )               reduce using rule 16 (factor -> ( expr ) .)
-    :               reduce using rule 16 (factor -> ( expr ) .)
 
 
 state 30
@@ -564,7 +572,6 @@ state 30
     ;               reduce using rule 13 (term -> factor * term .)
     ?               reduce using rule 13 (term -> factor * term .)
     )               reduce using rule 13 (term -> factor * term .)
-    :               reduce using rule 13 (term -> factor * term .)
 
 
 state 31
@@ -578,7 +585,6 @@ state 31
     ;               reduce using rule 18 (factor -> NAME .)
     ?               reduce using rule 18 (factor -> NAME .)
     )               reduce using rule 18 (factor -> NAME .)
-    :               reduce using rule 18 (factor -> NAME .)
 
 
 state 32
@@ -590,7 +596,6 @@ state 32
     ;               reduce using rule 14 (term -> factor / term .)
     ?               reduce using rule 14 (term -> factor / term .)
     )               reduce using rule 14 (term -> factor / term .)
-    :               reduce using rule 14 (term -> factor / term .)
 
 
 state 33
@@ -618,11 +623,19 @@ state 34
     NAME            reduce using rule 3 (statement -> { block_item_list } .)
     (               reduce using rule 3 (statement -> { block_item_list } .)
     NUM             reduce using rule 3 (statement -> { block_item_list } .)
+    :               reduce using rule 3 (statement -> { block_item_list } .)
+    ;               reduce using rule 3 (statement -> { block_item_list } .)
 
 
 state 35
 
-    (6) statement -> expr ? expr : . expr ;
+    (6) statement -> expr ? statement : . statement ;
+    (1) statement -> . expr ;
+    (2) statement -> . { }
+    (3) statement -> . { block_item_list }
+    (4) statement -> . WHILE ( expr ) statement
+    (5) statement -> . PRINT statement
+    (6) statement -> . expr ? statement : statement ;
     (9) expr -> . term + expr
     (10) expr -> . term - expr
     (11) expr -> . term
@@ -634,12 +647,16 @@ state 35
     (17) factor -> . NUM
     (18) factor -> . NAME
 
+    {               shift and go to state 10
+    WHILE           shift and go to state 4
+    PRINT           shift and go to state 8
     NAME            shift and go to state 2
     (               shift and go to state 7
     NUM             shift and go to state 5
 
-    expr                           shift and go to state 37
+    expr                           shift and go to state 3
     term                           shift and go to state 1
+    statement                      shift and go to state 37
     factor                         shift and go to state 9
 
 state 36
@@ -650,7 +667,7 @@ state 36
     (3) statement -> . { block_item_list }
     (4) statement -> . WHILE ( expr ) statement
     (5) statement -> . PRINT statement
-    (6) statement -> . expr ? expr : expr ;
+    (6) statement -> . expr ? statement : statement ;
     (9) expr -> . term + expr
     (10) expr -> . term - expr
     (11) expr -> . term
@@ -676,7 +693,7 @@ state 36
 
 state 37
 
-    (6) statement -> expr ? expr : expr . ;
+    (6) statement -> expr ? statement : statement . ;
 
     ;               shift and go to state 39
 
@@ -693,18 +710,22 @@ state 38
     NAME            reduce using rule 4 (statement -> WHILE ( expr ) statement .)
     (               reduce using rule 4 (statement -> WHILE ( expr ) statement .)
     NUM             reduce using rule 4 (statement -> WHILE ( expr ) statement .)
+    :               reduce using rule 4 (statement -> WHILE ( expr ) statement .)
+    ;               reduce using rule 4 (statement -> WHILE ( expr ) statement .)
 
 
 state 39
 
-    (6) statement -> expr ? expr : expr ; .
+    (6) statement -> expr ? statement : statement ; .
 
-    $end            reduce using rule 6 (statement -> expr ? expr : expr ; .)
-    }               reduce using rule 6 (statement -> expr ? expr : expr ; .)
-    {               reduce using rule 6 (statement -> expr ? expr : expr ; .)
-    WHILE           reduce using rule 6 (statement -> expr ? expr : expr ; .)
-    PRINT           reduce using rule 6 (statement -> expr ? expr : expr ; .)
-    NAME            reduce using rule 6 (statement -> expr ? expr : expr ; .)
-    (               reduce using rule 6 (statement -> expr ? expr : expr ; .)
-    NUM             reduce using rule 6 (statement -> expr ? expr : expr ; .)
+    $end            reduce using rule 6 (statement -> expr ? statement : statement ; .)
+    }               reduce using rule 6 (statement -> expr ? statement : statement ; .)
+    {               reduce using rule 6 (statement -> expr ? statement : statement ; .)
+    WHILE           reduce using rule 6 (statement -> expr ? statement : statement ; .)
+    PRINT           reduce using rule 6 (statement -> expr ? statement : statement ; .)
+    NAME            reduce using rule 6 (statement -> expr ? statement : statement ; .)
+    (               reduce using rule 6 (statement -> expr ? statement : statement ; .)
+    NUM             reduce using rule 6 (statement -> expr ? statement : statement ; .)
+    :               reduce using rule 6 (statement -> expr ? statement : statement ; .)
+    ;               reduce using rule 6 (statement -> expr ? statement : statement ; .)
 

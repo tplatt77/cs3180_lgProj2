@@ -19,23 +19,24 @@ if sys.version_info[0] >= 3:
 
 # For testing purposes:
 testDriver = False
+testFile = "testInput.txt"
 
 ######################################################################
 ######################################################################
 # Scanner generation
-tokens = ('NAME','NUM','WHILE','PRINT',)
+tokens = ('NAME','NUM','WHILE','PRINT', )
 
-literals = ['+','*', '-', '/','(',')', '=', '{', '}', ';','?', ':']
+literals = ['+','*', '-', '/','(',')', '=', '{', '}', ';','?', ':',]
 t_NAME    = r'[a-zA-Z_][a-zA-Z0-9_]*'
 t_WHILE   = r'@while'
 t_PRINT   = r'@print'
+t_ignore_COMMENT = r'\//.*'
 t_ignore = " \t\r"
 
 def t_NUM(t):
     r'[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?'
     t.value = float(t.value)
     return t
-
 
 def t_newline(t):
     r'\n+'
@@ -57,7 +58,8 @@ lex.lex()
 # A Node class to represent each node in a parse tree
 class Node:
    # dictionary of names->value pairs
-   symbols = { }
+   globalsDict = {}
+   symbolStack = [] # A stack of local variable dictionaries
    
    def __init__(self):
       """ Initializes self to an invalid state """
@@ -96,16 +98,35 @@ def ternary_interp_helper(node):
         result = node.children[2].interp()
     return result
 
+def find_symbol_helper(node, symbolName):
+   """ Return the nearest dictionary from Node that contains symbolName in symbolStatck. In no sybolName exists, returns top most dictionary. """
+   index = len(Node.symbolStack) - 1
+   if 0 > index:
+      return Node.globalsDict
+   result = Node.symbolStack[index]
+   while (not (symbolName in result) and index >= 0) :
+      index -= 1
+      result = Node.symbolStack[index]
+   if 0 > index:
+      if symbolName in Node.globalsDict:
+         return Node.globalsDict
+      # symbolName not found
+      result = Node.symbolStack[-1]
+   return result
+
 def set_symbol_value_helper(node):
-    Node.symbols[node.children[0]] = node.children[1].interp()
-    return Node.symbols[node.children[0]]
+    dict = find_symbol_helper(node, node.children[0])
+    dict[node.children[0]] = node.children[1].interp()
+    return dict[node.children[0]]
 
 def get_symbol_value_helper(node):
+   dict = find_symbol_helper(node, node.text)
    try:
-      return Node.symbols[node.text]
+      return dict[node.text]
    except LookupError:
       print("Undefined name '%s'" % node.text)
       return 0
+
 
 
 ######################################################################
@@ -168,7 +189,7 @@ def p_statement_print(p):
     p[0].function = print_interp_helper
 
 def p_statement_ternary(p):
-    ' statement : expr "?" expr ":" expr ";"'
+    ' statement : expr "?" statement ":" statement ";"'
     p[0] = Node() #Return a Node instance
     p[0].text = "TERNARY"
     p[0].children = [p[1], p[3], p[5]]
@@ -206,7 +227,7 @@ def p_expr_d(p):
     p[0] = Node() # Return a Node instance
     p[0].text = '='
     p[0].children = [p[1],p[3]]
-    p[0].function = lambda node: set_symbol_value_helper(node)
+    p[0].function = set_symbol_value_helper
 
 def p_term_a(p):
     '''term : factor '*' term '''
@@ -265,3 +286,10 @@ if testDriver:
         rootNode = yacc.parse(s+'\n') # parse() returns None upon error
         if None != rootNode:
             print rootNode.interp()   # print result of interpreting the entire node tree
+else:
+   with open(testFile, 'r') as myfile:
+       data=myfile.read()
+   print data
+   resultNode = yacc.parse(data+'\n') # parse returns None upon error
+   if None != resultNode:
+       print resultNode.interp()

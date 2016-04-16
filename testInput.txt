@@ -1,0 +1,53 @@
+// Test program for Large Project 2
+{
+
+// Parse tree interpreter demonstration
+{
+5 + 3;
+9 - 6;
+15 / 3;
+20 * 5;
+}
+
+// Testing subtraction and division
+// As well as named symbolic variables
+// Both results should be 3
+{
+a = 5;
+b = 6;
+c = 2;
+@print a - c;
+@print b / c;
+}
+
+// Ternary operator demonstration
+// Should print x then z
+//  Or 15 then 10
+{
+w = 0;
+x = 15;
+y = 10;
+z = 20;
+w ? {@print z;} : {@print x;};
+x ? {@print y;} : {@print z;};
+}
+
+// Demonstration of while loop
+{
+a = 3;
+b = 6;
+@while(a)
+{ 
+@print a; 
+a = a - 1;
+}
+@print a + 5;
+@while(b)
+{
+@print b;
+b = b - 2;
+}
+} // End of while loop demo
+
+// End of Program
+}
